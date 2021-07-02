@@ -42,25 +42,3 @@ class DrugSerializer(serializers.ModelSerializer):
         for data in openfda_data:
             OpenFDA.objects.create(drug=drug, **data)
         return drug
-
-
-
-# def update(self, instance, validated_data):
-#     ingredients_data = validated_data.pop('ingredients')
-
-#     instance.name = validated_data.get('name', instance.name)
-#     instance.description = validated_data.get('description', instance.description)
-#     instance.directions = validated_data.get('directions', instance.directions)
-#     instance.photo = validated_data.get('photo', instance.photo)
-
-#     ingredients_list = []
-
-#     for ingredient in ingredients_data:
-#         ingredient, created = Ingredient.objects.get_or_create(name=ingredient["name"])
-#         ingredients_list.append(ingredient)
-
-#     instance.ingredients = ingredients_list
-#     instance.save()
-#     return instance
-
-

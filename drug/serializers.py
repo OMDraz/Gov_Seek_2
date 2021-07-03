@@ -1,32 +1,31 @@
 from .models import Drug, Packaging, ActiveIngredients, OpenFDA
 from rest_framework import serializers 
 
-##Added some comments
 class PackagingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Packaging
-        fields = "__all__"
+        fields = ['drug','package_ndc','description','marketing_start_date','sample',]
 
 class OpenFDASerializer(serializers.ModelSerializer):
     class Meta:
         model = OpenFDA
-        fields = "__all__"
+        fields = ['drug','manufacturer_name','rxcui','unii','spl_set_id',]
 
 class ActiveIngredientsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ActiveIngredients
-        fields = "__all__"
+        fields = ['drug','name','strength']
     
 
 class DrugSerializer(serializers.ModelSerializer):
     active_ingredients = ActiveIngredientsSerializer(many=True)
     packaging = PackagingSerializer(many=True)
-    openfda = OpenFDASerializer()
+    openfda = serializers.ListField()
 
 
     class Meta:
         model = Drug 
-        fields = "__all__"
+        fields = ['product_ndc','generic_name','labeler_name','brand_name','active_ingredients','finished','packaging','listing_expiration_date','openfda','marketing_category','dosage_form','spl_id','product_type','marketing_start_date','product_id','application_number','brand_name_base','pharm_class',]
     
     def create(self, validated_data):
         active_ingredient_data = validated_data.pop('active_ingredients')

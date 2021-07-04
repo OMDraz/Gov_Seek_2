@@ -20,7 +20,7 @@ class ActiveIngredientsSerializer(serializers.ModelSerializer):
 class DrugSerializer(serializers.ModelSerializer):
     active_ingredients = ActiveIngredientsSerializer(many=True)
     packaging = PackagingSerializer(many=True)
-    openfda = serializers.ListField()
+    openfda = OpenFDASerializer(many=True)
 
 
     class Meta:

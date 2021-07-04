@@ -20,12 +20,12 @@ class ActiveIngredientsSerializer(serializers.ModelSerializer):
 class DrugSerializer(serializers.ModelSerializer):
     active_ingredients = ActiveIngredientsSerializer(many=True)
     packaging = PackagingSerializer(many=True)
-    openfda = OpenFDASerializer(many=True)
+    openfda = OpenFDASerializer()
 
 
     class Meta:
         model = Drug 
-        fields = ['product_ndc','generic_name','labeler_name','brand_name','active_ingredients','finished','packaging','listing_expiration_date','openfda','marketing_category','dosage_form','spl_id','product_type','marketing_start_date','product_id','application_number','brand_name_base','pharm_class',]
+        fields = ['product_ndc','generic_name','labeler_name','brand_name','active_ingredients','finished','packaging','listing_expiration_date','openfda',]
     
     def create(self, validated_data):
         active_ingredient_data = validated_data.pop('active_ingredients')

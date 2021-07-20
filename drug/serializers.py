@@ -20,8 +20,8 @@ class OpenFDASerializer(serializers.ModelSerializer):
 
 class DrugSerializer(serializers.ModelSerializer):
     openfda = OpenFDASerializer()
-    packaging = PackagingSerializer()
-    active_ingredients = ActiveIngredientsSerializer()
+    packaging = PackagingSerializer(many=True)
+    active_ingredients = ActiveIngredientsSerializer(many=True)
 
     pharm_class = serializers.ListField(
             child=serializers.CharField(),
@@ -31,30 +31,22 @@ class DrugSerializer(serializers.ModelSerializer):
             child=serializers.CharField(),
             allow_empty=True
         )
-
-
-    
     class Meta:
         model = Drug
         fields = '__all__'
+        extra_kwargs = {'openfda': {'required': False}}
 
+    def create(self, validated_data):
+        openfda_data = validated_data.pop('openfda')
+        return openfda_data
+        # packaging_data = validated_data.pop('packaging')
+        # active_ingredients_data = validated_data.pop('active_ingredients')
+        # drug = Drug.objects.create(**validated_data)
 
-
-# A field class that validates a list of objects.
-
-# Signature: ListField(child=<A_FIELD_INSTANCE>, allow_empty=True, min_length=None, max_length=None)
-
-# child - A field instance that should be used for validating the objects in the list. If this argument is not provided then objects in the list will not be validated.
-# allow_empty - Designates if empty lists are allowed.
-# min_length - Validates that the list contains no fewer than this number of elements.
-# max_length - Validates that the list contains no more than this number of elements.
-# For example, to validate a list of integers you might use something like the following:
-
-# scores = serializers.ListField(
-#    child=serializers.IntegerField(min_value=0, max_value=100)
-# )
-# The ListField class also supports a declarative style that allows you to write reusable list field classes.
-
-# class StringListField(serializers.ListField):
-#     child = serializers.CharField()
-# We can now reuse our custom StringListField class throughout our application, without having to provide a child argument to it.
+        # for openfda_datas in openfda_data:
+        #     OpenFDA.objects.create(drug=drug, **openfda_datas)
+        # for active_ingredient_data in active_ingredients_data:
+        #     ActiveIngredients.objects.create(drug=drug, **active_ingredient_data)
+        # for packaging_datas in packaging_data:
+        #     Packaging.objects.create(drug=drug, **packaging_datas)
+        # return drug

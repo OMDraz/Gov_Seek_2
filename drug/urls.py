@@ -1,7 +1,8 @@
-from django.contrib import admin
 from django.urls import path
-from .views import DrugCreateAPI
+from .views import DrugDetail, DrugList
 
 urlpatterns = [
-    path('', DrugCreateAPI.as_view()),
+    path('', DrugList.as_view()),
+    path('<int:pk>', DrugDetail.as_view()),
 ]
+
